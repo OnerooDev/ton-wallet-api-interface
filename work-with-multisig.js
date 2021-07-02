@@ -109,6 +109,32 @@ module.exports = {
       return balance
   },
 
+  getAddress: async () => {
+
+      const { address } = await tonClient.abi.encode_message({
+          abi: SafeMultisigContract.abi,
+          deploy_set: {
+              tvc: SafeMultisigContract.tvc,
+              initial_data: {},
+          },
+          call_set: {
+              function_name: "constructor",
+              input: {
+                  // Multisig owners public key.
+                  // We are going to use a single key.
+                  // You can use any number of keys and custodians.
+                  // See https://docs.ton.dev/86757ecb2/p/94921e-multisignature-wallet-management-in-tonos-cli/t/242ea8
+                  owners: [`0x${signer.keys.public}`],
+                  // Number of custodians to require for confirm transaction.
+                  // We use 0 for simplicity. Consider using 2+ for sufficient security.
+                  reqConfirms: 0,
+              },
+          },
+          signer,
+      });
+      return address
+  },
+
   listTrans: async () => {
     // Here we create deployMessage simply to get account address and check its balance
     // if you know your wallet address, you do not need this step.

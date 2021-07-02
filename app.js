@@ -31,12 +31,30 @@ app.get('/wallet/func/sendTo/:address/:summ',async function (req, res, next) {
 	}
 
 });
+
 //checkBalance
 app.get('/wallet/func/balance/:address',async function (req, res, next) {
 	try{
     let func = await wallet.checkBalance(req.params.address)
 
     res.json(func)
+	}
+	catch(err){
+		console.log(err)
+	}
+
+});
+
+//getAddress
+app.get('/wallet/func/address/',async function (req, res, next) {
+	try{
+    let func = await wallet.getAddress()
+
+		const obj = {
+      address: func
+    };
+
+    res.json(obj)
 	}
 	catch(err){
 		console.log(err)
@@ -53,7 +71,7 @@ app.get('/wallet/func/balance/:address',async function (req, res, next) {
 //
 
 //Start WebServer
-var server = app.listen(3001, function () {
+var server = app.listen(3003, function () {
 
     var host = "localhost";
     var port = server.address().port;
